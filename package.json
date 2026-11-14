@@ -1,0 +1,9 @@
+{
+  "name": "szwecja-zwrot-podatku",
+  "version": "1.0.0",
+  "description": "Kalkulator zwrotu podatku ze Szwecji 2024/2025 (PL/SV)",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}

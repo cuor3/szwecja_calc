@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zwrot podatku Szwecja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --surface-2:#f0f3f7; --border:#dde2ea;
+  --text:#18202b; --muted:#5b6676; --accent:#005b99; --accent-soft:#e3eff8;
+  --yellow:#fecc02; --good:#13794a; --good-soft:#e2f4ea; --bad:#b42318; --bad-soft:#fdecea;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 16px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141b; --surface:#171e27; --surface-2:#1e2733; --border:#2c3746;
+    --text:#e8edf3; --muted:#9aa7b8; --accent:#5fb0ea; --accent-soft:#16324a;
+    --yellow:#fecc02; --good:#4cc98a; --good-soft:#14301f; --bad:#ff8a7a; --bad-soft:#3a1714;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f141b; --surface:#171e27; --surface-2:#1e2733; --border:#2c3746;
+  --text:#e8edf3; --muted:#9aa7b8; --accent:#5fb0ea; --accent-soft:#16324a;
+  --yellow:#fecc02; --good:#4cc98a; --good-soft:#14301f; --bad:#ff8a7a; --bad-soft:#3a1714;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 48px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.brand{display:flex;gap:12px;align-items:center}
+.flag{width:36px;height:24px;border-radius:4px;background:var(--accent);position:relative;flex:none;overflow:hidden}
+.flag:before{content:"";position:absolute;left:10px;top:0;bottom:0;width:6px;background:var(--yellow)}
+.flag:after{content:"";position:absolute;top:9px;left:0;right:0;height:6px;background:var(--yellow)}
+h1{font-size:22px;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:13px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--muted);font:600 13px Inter,sans-serif;padding:7px 12px;border-radius:7px;cursor:pointer}
+.seg button.on{background:var(--accent);color:#fff}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+@media (max-width:920px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.card h2{font-size:16px;margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
+.ruta{font:500 11px "JetBrains Mono",monospace;background:var(--accent-soft);color:var(--accent);padding:2px 7px;border-radius:5px}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px 14px}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:500}
+label.f small{color:var(--muted);font-weight:400;font-size:12px}
+input[type=number]{width:100%;font:500 15px Inter,sans-serif;padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text)}
+input[type=number]:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.toggle{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--surface-2)}
+.toggle input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.toggle b{display:block;font-size:14px}
+.toggle span{color:var(--muted);font-size:12px}
+.radios{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-bottom:12px}
+details{margin-top:12px;border-top:1px dashed var(--border);padding-top:10px}
+summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:13px}
+.note{font-size:12.5px;color:var(--muted);margin-top:8px}
+.warn{font-size:13px;background:var(--bad-soft);color:var(--bad);padding:8px 10px;border-radius:8px;margin-top:10px}
+.hidden{display:none!important}
+aside{position:sticky;top:16px}
+.big{border-radius:14px;padding:18px;margin-bottom:14px;border:1px solid var(--border)}
+.big.good{background:var(--good-soft);border-color:transparent}
+.big.bad{background:var(--bad-soft);border-color:transparent}
+.big .lbl{font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+.big.good .lbl,.big.good .val{color:var(--good)}
+.big.bad .lbl,.big.bad .val{color:var(--bad)}
+.big .val{font-size:34px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.rows{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:14px}
+.rows .r{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.rows .sep{grid-column:1/-1;border-top:1px solid var(--border);margin:4px 0}
+.rows .tot{font-weight:700}
+.rows .minus{color:var(--good)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cmp div{background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.cmp .t{font-size:12px;color:var(--muted);font-weight:600}
+.cmp .v{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.cmp .best{outline:2px solid var(--good)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+footer{color:var(--muted);font-size:12px;margin-top:10px}
+footer a,.card a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand">
+    <div class="flag" aria-hidden="true"></div>
+    <div>
+      <h1 data-i="title">Zwrot podatku ze Szwecji</h1>
+      <div class="sub" data-i="subtitle">Deklaracja roczna (Inkomstdeklaration 1) – dla osób poniżej 66 lat</div>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="seg" id="yearSeg"><button data-y="2024">2024</button><button data-y="2025" class="on">2025</button></div>
+    <div class="seg" id="langSeg"><button data-l="pl" class="on">PL</button><button data-l="sv">SV</button></div>
+  </div>
+</header>
+
+<div class="grid">
+<main>
+
+  <section class="card">
+    <h2><span data-i="modeH">Sposób opodatkowania</span></h2>
+    <p class="hint" data-i="modeHint">Zwrot z deklaracji dotyczy normalnego opodatkowania. SINK to podatek ryczałtowy bez ulg – pokazujemy go dla porównania.</p>
+    <div class="radios">
+      <label class="toggle"><input type="radio" name="mode" value="normal" checked><div><b data-i="modeNormal">Normalny (deklaracja)</b><span data-i="modeNormalD">Rezydent podatkowy – pobyt ≥ 6 mies.</span></div></label>
+      <label class="toggle"><input type="radio" name="mode" value="sink"><div><b>SINK 25%</b><span data-i="modeSinkD">Nierezydent – bez ulg i bez deklaracji</span></div></label>
+    </div>
+    <label class="toggle" id="expertBox"><input type="checkbox" id="expert"><div><b data-i="expertB">Expertskatt (ulga dla ekspertów)</b><span id="expertD"></span></div></label>
+  </section>
+
+  <section class="card">
+    <h2><span data-i="incH">Dochody i pobrany podatek</span></h2>
+    <p class="hint" data-i="incHint">Dane znajdziesz w kontrolluppgift / na Mina sidor w Skatteverket.</p>
+    <div class="fields">
+      <label class="f"><span><span data-i="lon">Wynagrodzenie brutto</span> <span class="ruta">1.1</span></span><input type="number" id="lon" min="0" step="100" value="395700"></label>
+      <label class="f"><span><span data-i="kost">Dieta / zwrot kosztów (opodatkowany)</span> <span class="ruta">1.2</span></span><input type="number" id="kost" min="0" step="100" value="0"><small data-i="kostS">Wpisz, jeśli pracodawca wypłacił dietę niższą niż ryczałt albo jako zwykłe wynagrodzenie.</small></label>
+      <label class="f"><span data-i="prelim">Pobrana zaliczka (preliminärskatt)</span><input type="number" id="prelim" min="0" step="100" value="116267"><small data-i="prelimS">Razem z pobranym SINK, jeśli Skatteverket przenosi ten dochód do zwykłego opodatkowania.</small></label>
+      <label class="f"><span data-i="ki">Podatek gminny + regionalny (%)</span><input type="number" id="ki" min="0" max="40" step="0.01" value="32.41"><small id="kiS"></small></label>
+      <label class="f"><span data-i="begr">Opłata pogrzebowa (%)</span><input type="number" id="begr" min="0" max="2" step="0.001" value="0"><small data-i="begrS">Tylko osoby zameldowane w Szwecji (folkbokförda), ok. 0,29%. Pracownicy mieszkający w Polsce – 0.</small></label>
+      <label class="f"><span data-i="kyrka">Opłata kościelna (%)</span><input type="number" id="kyrka" min="0" max="3" step="0.01" value="0"><small data-i="kyrkaS">Tylko członkowie Svenska kyrkan / innych wspólnot.</small></label>
+    </div>
+  </section>
+
+  <section class="card normalOnly">
+    <h2><span data-i="trH">Diety – podróż służbowa (traktamente)</span> <span class="ruta">2.2</span></h2>
+    <p class="hint" data-i="trHint">Odliczenie przysługuje, gdy pracodawca nie wypłacił nieopodatkowanej diety (lub wypłacił mniej niż ryczałt). Warunek: nocleg poza domem, ponad 50 km od miejsca pracy i zamieszkania.</p>
+    <div class="fields">
+      <label class="f"><span data-i="trFull">Pełne dni</span><input type="number" id="trFull" min="0" value="0"><small id="trFullS"></small></label>
+      <label class="f"><span data-i="trHalf">Połówki dni</span><input type="number" id="trHalf" min="0" value="0"><small id="trHalfS"></small></label>
+      <label class="f"><span data-i="tr3m">Dni po 3 miesiącach w tym samym miejscu</span><input type="number" id="tr3m" min="0" value="0"><small id="tr3mS"></small></label>
+      <label class="f"><span data-i="trNight">Noce bez rachunku (ryczałt)</span><input type="number" id="trNight" min="0" value="0"><small id="trNightS"></small></label>
+      <label class="f"><span data-i="trLogi">Faktyczne koszty noclegów (SEK)</span><input type="number" id="trLogi" min="0" step="100" value="0"><small data-i="trLogiS">Na podstawie rachunków – zamiast ryczałtu za noc.</small></label>
+      <label class="f"><span data-i="trMil">Jazdy prywatnym autem (mil)</span><input type="number" id="trMil" min="0" value="0"><small data-i="trMilS">25 kr za milę (10 km).</small></label>
+      <label class="f"><span data-i="trMeal">Pomniejszenie za darmowe posiłki (SEK)</span><input type="number" id="trMeal" min="0" step="1" value="0"></label>
+    </div>
+    <details><summary data-i="mealSum">Ile odjąć za darmowe posiłki?</summary>
+      <div class="tbl"><table id="mealTbl"></table></div>
+    </details>
+  </section>
+
+  <section class="card normalOnly">
+    <h2><span data-i="taH">Praca tymczasowa, podwójne zamieszkanie, podróże do domu</span> <span class="ruta">2.3</span></h2>
+    <p class="hint" data-i="taHint">Dla osób, które pracują ponad 50 km od domu, nocują w miejscu pracy i zatrzymały mieszkanie w domu (np. w Polsce).</p>
+    <div class="radios">
+      <label class="toggle"><input type="radio" name="ta" value="none" checked><div><b data-i="taNone">Nie dotyczy</b></div></label>
+      <label class="toggle"><input type="radio" name="ta" value="tillf"><div><b data-i="taTillf">Praca tymczasowa</b><span data-i="taTillfD">Tillfälligt arbete – zwykle do 2 lat</span></div></label>
+      <label class="toggle"><input type="radio" name="ta" value="dubbel"><div><b data-i="taDubbel">Podwójne zamieszkanie</b><span data-i="taDubbelD">Dubbel bosättning – max 2 lata (5 przy pracy partnera)</span></div></label>
+    </div>
+    <div class="fields" id="taFields">
+      <label class="f taOn"><span data-i="taDays">Dni w 1. miesiącu w miejscu pracy</span><input type="number" id="taDays" min="0" max="31" value="0"><small id="taDaysS"></small></label>
+      <label class="f taOn"><span data-i="taLogi">Faktyczne koszty mieszkania w Szwecji (SEK/rok)</span><input type="number" id="taLogi" min="0" step="100" value="0"></label>
+      <label class="f tillfOnly"><span data-i="taNights">Noce bez rachunku (ryczałt)</span><input type="number" id="taNights" min="0" value="0"><small id="taNightsS"></small></label>
+      <label class="f"><span data-i="hemN">Podróże do domu (liczba, tam i z powrotem)</span><input type="number" id="hemN" min="0" max="53" value="0"><small data-i="hemNS">Max 1 w tygodniu, w obrębie UE/EOG.</small></label>
+      <label class="f"><span data-i="hemC">Koszt jednej podróży (SEK)</span><input type="number" id="hemC" min="0" step="10" value="0"><small data-i="hemCS">Najtańszy sposób; prom/autem: 25 kr/milę + opłaty.</small></label>
+    </div>
+    <div class="warn hidden" id="hemWarn" data-i="hemWarn">Podróże do domu odliczysz tylko przy pracy tymczasowej/podwójnym zamieszkaniu albo gdy rodzina mieszka w innym miejscu.</div>
+    <p class="note" data-i="taNote">Bez progu kwotowego – odliczasz od pierwszej korony. Wypłacone przez pracodawcę dodatki na mieszkanie są opodatkowane i wpisuje się je jako dochód.</p>
+  </section>
+
+  <section class="card normalOnly">
+    <h2><span data-i="otH">Inne odliczenia</span></h2>
+    <div class="fields">
+      <label class="f"><span><span data-i="resor">Dojazdy do pracy – łączny koszt</span> <span class="ruta">2.1</span></span><input type="number" id="resor" min="0" step="100" value="0"><small data-i="resorS">Odliczasz nadwyżkę ponad 11 000 kr.</small></label>
+      <label class="f"><span><span data-i="ovr">Pozostałe koszty pracy</span> <span class="ruta">2.4</span></span><input type="number" id="ovr" min="0" step="100" value="0"><small data-i="ovrS">Np. narzędzia, odzież ochronna – nadwyżka ponad 5 000 kr.</small></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-i="parH">Parametry podatkowe</h2>
+    <div class="tbl"><table id="parTbl"></table></div>
+    <p class="note" data-i="parNote">Źródło: Skatteverket – „Belopp och procent” 2024 i 2025, avdragslexikon, oraz ustawa o podatku dochodowym (IL 63 i 67 kap.).</p>
+  </section>
+
+</main>
+
+<aside>
+  <div class="big" id="bigBox"><div class="lbl" id="bigLbl"></div><div class="val" id="bigVal"></div><div class="note" id="bigNote"></div></div>
+  <section class="card">
+    <h2 data-i="resH">Wyliczenie</h2>
+    <div class="rows" id="rows"></div>
+  </section>
+  <section class="card">
+    <h2 data-i="cmpH">Normalny vs SINK</h2>
+    <div class="cmp" id="cmp"></div>
+    <p class="note" data-i="cmpNote">SINK wymaga decyzji Skatteverket i jest dostępny tylko dla nierezydentów (pobyt krótszy niż 6 mies.).</p>
+  </section>
+  <section class="card">
+    <h2 data-i="dlH">Co wpisać w deklaracji</h2>
+    <div class="rows" id="dekl"></div>
+    <p class="note" id="deadline"></p>
+  </section>
+</aside>
+</div>
+
+<footer>
+  <p data-i="disc">Kalkulator szacunkowy. Nie uwzględnia m.in. dochodów kapitałowych, nieruchomości, ulgi ROT/RUT ani składki emerytalnej (7% – w praktyce w całości kompensowana ulgą). Ostateczną kwotę ustala Skatteverket.</p>
+  <p><a href="https://www.skatteverket.se/privat/skatter/beloppochprocent" target="_blank" rel="noopener">Skatteverket – Belopp och procent</a> · <a href="https://www.skatteverket.se/privat/skatter/arbeteochinkomst/traktamente" target="_blank" rel="noopener">Traktamente</a> · <a href="https://www.skatteverket.se/sink" target="_blank" rel="noopener">SINK</a></p>
+</footer>
+</div>
+
+<script src="calc.js"></script>
+<script>
+/* ===== i18n ===== */
+const SV = {
+  title:"Skatteåterbäring från Sverige", subtitle:"Inkomstdeklaration 1 – för dig under 66 år",
+  modeH:"Beskattningsform", modeHint:"Återbäring via deklarationen gäller vanlig beskattning. SINK är en schablonskatt utan avdrag – visas för jämförelse.",
+  modeNormal:"Vanlig (deklaration)", modeNormalD:"Obegränsat skattskyldig – vistelse ≥ 6 mån", modeSinkD:"Utomlands bosatt – inga avdrag, ingen deklaration",
+  expertB:"Expertskatt", incH:"Inkomster och avdragen skatt", incHint:"Uppgifterna finns i kontrolluppgiften / på Mina sidor hos Skatteverket.",
+  lon:"Lön brutto", kost:"Kostnadsersättning / skattepliktigt traktamente", kostS:"Fyll i om arbetsgivaren betalat lägre traktamente än schablonen eller som lön.",
+  prelim:"Avdragen preliminärskatt", prelimS:"Inklusive avdragen SINK om Skatteverket flyttar inkomsten till vanlig beskattning.", ki:"Kommunal- + regionskatt (%)", begr:"Begravningsavgift (%)", begrS:"Endast folkbokförda i Sverige, ca 0,29 %. Bosatt i Polen – 0.",
+  kyrka:"Kyrkoavgift (%)", kyrkaS:"Endast medlemmar i Svenska kyrkan / andra trossamfund.",
+  trH:"Traktamente – tjänsteresa", trHint:"Avdrag om arbetsgivaren inte betalat skattefritt traktamente (eller lägre än schablonen). Krav: övernattning, mer än 50 km från arbetsplats och bostad.",
+  trFull:"Hela dagar", trHalf:"Halva dagar", tr3m:"Dagar efter 3 månader på samma ort", trNight:"Nätter utan kvitto (schablon)",
+  trLogi:"Faktiska logikostnader (SEK)", trLogiS:"Enligt kvitton – i stället för nattschablon.", trMil:"Resor med egen bil (mil)", trMilS:"25 kr per mil.",
+  trMeal:"Minskning för fria måltider (SEK)", mealSum:"Hur mycket ska minskas för fria måltider?",
+  taH:"Tillfälligt arbete, dubbel bosättning och hemresor", taHint:"För dig som arbetar mer än 50 km hemifrån, övernattar på arbetsorten och har kvar bostaden på hemorten (t.ex. i Polen).",
+  taNone:"Ej aktuellt", taTillf:"Tillfälligt arbete", taTillfD:"Normalt högst 2 år", taDubbel:"Dubbel bosättning", taDubbelD:"Högst 2 år (5 år vid makes/sambos arbete)",
+  taDays:"Dagar under första månaden på arbetsorten", taLogi:"Faktiska boendekostnader i Sverige (SEK/år)", taNights:"Nätter utan kvitto (schablon)",
+  hemN:"Hemresor (antal, tur och retur)", hemNS:"Högst en per vecka, inom EU/EES.", hemC:"Kostnad per resa (SEK)", hemCS:"Billigaste färdsätt; bil: 25 kr/mil + avgifter.",
+  hemWarn:"Hemresor får dras av vid tillfälligt arbete/dubbel bosättning eller om familjen bor på annan ort.",
+  taNote:"Ingen beloppsgräns – avdrag från första kronan. Bostadsbidrag från arbetsgivaren är skattepliktiga och redovisas som inkomst.",
+  otH:"Övriga avdrag", resor:"Resor till och från arbetet – total kostnad", resorS:"Avdrag för belopp över 11 000 kr.",
+  ovr:"Övriga utgifter", ovrS:"T.ex. verktyg, skyddskläder – belopp över 5 000 kr.",
+  parH:"Skatteparametrar", parNote:"Källa: Skatteverket – Belopp och procent 2024 och 2025, avdragslexikon samt inkomstskattelagen (63 och 67 kap.).",
+  resH:"Beräkning", cmpH:"Vanlig skatt vs SINK", cmpNote:"SINK kräver beslut från Skatteverket och gäller endast utomlands bosatta (vistelse kortare än 6 mån).",
+  dlH:"Vad fylls i deklarationen",
+  disc:"Uppskattning. Tar inte hänsyn till kapitalinkomster, fastigheter, ROT/RUT eller allmän pensionsavgift (7 % – i praktiken helt kvittad). Slutlig skatt fastställs av Skatteverket."
+};
+const PL = {};
+document.querySelectorAll('[data-i]').forEach(el=>PL[el.dataset.i]=el.textContent);
+
+const T = {
+  pl:{refund:"Zwrot podatku", owe:"Dopłata (kvarskatt)", ofTotal:"Podatek należny", gross:"Dochód (1.1 + 1.2)", expertFree:"Zwolnione 25% (expertskatt)",
+      ded:"Odliczenia (2.1–2.4)", ffi:"Dochód ustalony", ga:"Ulga podstawowa (grundavdrag)", bfi:"Dochód do opodatkowania",
+      kom:"Podatek gminny", stat:"Podatek państwowy 20%", forv:"Ulga od dochodu (skattereduktion för förvärvsinkomst)", begr:"Opłata pogrzebowa", kyrka:"Opłata kościelna", jsa:"Ulga za pracę (jobbskatteavdrag)",
+      ps:"Public service-avgift", tot:"Podatek ostateczny", prelim:"Pobrana zaliczka", eff:"Efektywna stopa",
+      normal:"Normalny", sink:"SINK 25%", ret:"zwrot", pay:"dopłata",
+      d11:"Wynagrodzenie", d12:"Dieta/zwrot kosztów", d21:"Dojazdy (łączny koszt)", d22:"Podróże służbowe", d23:"Praca tymcz./podw. zam./podróże do domu", d24:"Pozostałe koszty (łącznie)",
+      sinkNote:"Przy SINK nie składasz deklaracji – wynik to różnica między zaliczką a 25%.",
+      dl2024:"Rok 2024: termin deklaracji minął – złóż wniosek o korektę (begäran om omprövning). Można to zrobić do końca 2030 r.",
+      dl2025:"Rok 2025: jeśli deklaracja nie została złożona lub pominięto odliczenia, złóż wniosek o korektę (omprövning) – możliwe przez 6 lat.",
+      expertD:y=>`25% wynagrodzenia zwolnione z podatku przez max 7 lat. Wymaga decyzji Forskarskattenämnden (wniosek do 3 mies. od startu). Próg ${y==2025?'od 2025: 1,5':'2'} PBB/mies. = ${fmt(P[y].pbb*P[y].expertPbb)} kr.`,
+      kiS:y=>`Średnia krajowa ${String(P[y].avgKI).replace('.',',')}% – wpisz stawkę swojej gminy.`,
+      perDay:"kr/dzień", perNight:"kr/noc", firstMonth:"tylko 1. miesiąc",
+      par:["Kwota bazowa (prisbasbelopp)","Próg podatku państwowego (skiktgräns)","Ulga podstawowa min–max","Public service – maks.","Dieta krajowa: pełny / pół dnia","Ryczałt za nocleg","Po 3 mies. (bez diety od pracodawcy)","Praca tymczasowa – posiłki 1. mies.","Podwójne zamieszkanie – posiłki 1. mies.","Próg dojazdów 2.1 / pozostałych 2.4","SINK","Jobbskatteavdrag – maks. (przy śr. stawce)"],
+      meal:["Posiłki","Pełna dieta","Po 3 mies.","Po 2 latach","Śniadanie, obiad i kolacja","Obiad i kolacja","Obiad lub kolacja","Śniadanie"]},
+  sv:{refund:"Skatteåterbäring", owe:"Kvarskatt", ofTotal:"Slutlig skatt", gross:"Inkomst (1.1 + 1.2)", expertFree:"Skattefria 25 % (expertskatt)",
+      ded:"Avdrag (2.1–2.4)", ffi:"Fastställd förvärvsinkomst", ga:"Grundavdrag", bfi:"Beskattningsbar förvärvsinkomst",
+      kom:"Kommunal inkomstskatt", stat:"Statlig inkomstskatt 20 %", forv:"Skattereduktion för förvärvsinkomst", begr:"Begravningsavgift", kyrka:"Kyrkoavgift", jsa:"Jobbskatteavdrag",
+      ps:"Public service-avgift", tot:"Slutlig skatt", prelim:"Preliminärskatt", eff:"Effektiv skattesats",
+      normal:"Vanlig", sink:"SINK 25 %", ret:"åter", pay:"kvar",
+      d11:"Lön", d12:"Kostnadsersättning", d21:"Resor till/från arbetet (total)", d22:"Tjänsteresor", d23:"Tillf. arbete/dubbel bos./hemresor", d24:"Övriga utgifter (total)",
+      sinkNote:"Vid SINK lämnas ingen deklaration – resultatet är skillnaden mellan avdragen skatt och 25 %.",
+      dl2024:"Inkomstår 2024: deklarationstiden har gått ut – begär omprövning. Det går fram till utgången av 2030.",
+      dl2025:"Inkomstår 2025: har avdrag missats kan du begära omprövning – inom sex år.",
+      expertD:y=>`25 % av lönen skattefri i högst 7 år. Kräver beslut från Forskarskattenämnden (ansökan inom 3 mån). Gräns ${y==2025?'från 2025: 1,5':'2'} pbb/mån = ${fmt(P[y].pbb*P[y].expertPbb)} kr.`,
+      kiS:y=>`Riksgenomsnitt ${String(P[y].avgKI).replace('.',',')} % – ange din kommuns skattesats.`,
+      perDay:"kr/dag", perNight:"kr/natt", firstMonth:"endast första månaden",
+      par:["Prisbasbelopp","Skiktgräns statlig skatt","Grundavdrag lägst–högst","Public service – max","Traktamente hel / halv dag","Nattschablon","Efter 3 mån (utan traktamente)","Tillfälligt arbete – måltider mån 1","Dubbel bosättning – måltider mån 1","Beloppsgräns 2.1 / 2.4","SINK","Jobbskatteavdrag – max (vid snittskatt)"],
+      meal:["Måltider","Helt traktamente","Efter 3 mån","Efter 2 år","Frukost, lunch och middag","Lunch och middag","Lunch eller middag","Frukost"]}
+};
+
+let year = 2025, lang = 'pl';
+const $ = id => document.getElementById(id);
+const fmt = n => Math.round(n).toLocaleString('sv-SE');
+const kr = n => fmt(n)+' kr';
+const num = id => Math.max(0, parseFloat($(id).value) || 0);
+
+function readInputs(){
+  return {
+    lon:num('lon'), kost:num('kost'), prelim:num('prelim'), ki:num('ki'), begr:num('begr'), kyrka:num('kyrka'),
+    expert:$('expert').checked,
+    trFull:num('trFull'), trHalf:num('trHalf'), tr3m:num('tr3m'), trNight:num('trNight'), trLogi:num('trLogi'), trMil:num('trMil'), trMeal:num('trMeal'),
+    ta:document.querySelector('input[name=ta]:checked').value,
+    taDays:num('taDays'), taLogi:num('taLogi'), taNights:num('taNights'), hemN:num('hemN'), hemC:num('hemC'),
+    resor:num('resor'), ovr:num('ovr')
+  };
+}
+
+function row(label, value, cls=''){ return `<div class="${cls}">${label}</div><div class="r ${cls}">${value}</div>`; }
+
+function render(){
+  const t = T[lang], v = readInputs(), r = calc(year, v), p = r.p;
+  const mode = document.querySelector('input[name=mode]:checked').value;
+  const sink = mode === 'sink';
+  document.querySelectorAll('.normalOnly').forEach(e=>e.classList.toggle('hidden', sink));
+  $('expertBox').classList.toggle('hidden', sink);
+
+  // dynamiczne podpowiedzi
+  $('expertD').textContent = t.expertD(year);
+  $('kiS').textContent = t.kiS(year);
+  $('trFullS').textContent = `${p.trFull} ${t.perDay}`;
+  $('trHalfS').textContent = `${p.trHalf} ${t.perDay}`;
+  $('tr3mS').textContent = `${p.tr3m} ${t.perDay}`;
+  $('trNightS').textContent = `${p.trNight} ${t.perNight}`;
+  $('taDaysS').textContent = v.ta==='dubbel' ? `${p.dubbelMeal} ${t.perDay} – ${t.firstMonth}` : `${p.tillfMeal} ${t.perDay} – ${t.firstMonth}`;
+  $('taNightsS').textContent = `${p.tillfNight} ${t.perNight}`;
+  document.querySelectorAll('.taOn').forEach(e=>e.classList.toggle('hidden', v.ta==='none'));
+  document.querySelectorAll('.tillfOnly').forEach(e=>e.classList.toggle('hidden', v.ta!=='tillf'));
+  $('hemWarn').classList.toggle('hidden', !(v.ta==='none' && v.hemN>0));
+
+  // wynik główny
+  const diff = sink ? r.sinkDiff : r.diff;
+  const box = $('bigBox');
+  box.className = 'big ' + (diff >= 0 ? 'good' : 'bad');
+  $('bigLbl').textContent = (diff >= 0 ? t.refund : t.owe) + ' · ' + year;
+  $('bigVal').textContent = kr(Math.abs(diff));
+  $('bigNote').textContent = sink ? t.sinkNote : `${t.ofTotal}: ${kr(r.total)} · ${t.eff}: ${(r.income>0? (r.total/(v.lon+v.kost)*100):0).toFixed(1).replace('.',',')}%`;
+
+  // rozbicie
+  let h = '';
+  if (sink){
+    h += row(t.gross, kr(v.lon+v.kost)) + row('SINK 25%', kr(r.sinkTax)) + '<div class="sep"></div>'
+       + row(t.prelim, kr(v.prelim)) + row(diff>=0?t.refund:t.owe, kr(Math.abs(diff)), 'tot');
+  } else {
+    h += row(t.gross, kr(v.lon+v.kost));
+    if (r.expertFree) h += row(t.expertFree, '−'+kr(r.expertFree), 'minus');
+    if (r.deductions) h += row(t.ded, '−'+kr(r.deductions), 'minus');
+    h += row(t.ffi, kr(r.ffi)) + row(t.ga, '−'+kr(r.ga), 'minus') + row(t.bfi, kr(r.bfi), 'tot') + '<div class="sep"></div>';
+    h += row(`${t.kom} (${String(v.ki).replace('.',',')}%)`, kr(r.kommunal));
+    if (r.statlig) h += row(t.stat, kr(r.statlig));
+    if (r.begr) h += row(t.begr, kr(r.begr));
+    if (r.kyrka) h += row(t.kyrka, kr(r.kyrka));
+    h += row(t.jsa, '−'+kr(r.jsa), 'minus');
+    if (r.forv) h += row(t.forv, '−'+kr(r.forv), 'minus');
+    h += row(t.ps, kr(r.ps));
+    h += '<div class="sep"></div>' + row(t.tot, kr(r.total), 'tot') + row(t.prelim, kr(v.prelim))
+       + row(diff>=0?t.refund:t.owe, kr(Math.abs(diff)), 'tot');
+  }
+  $('rows').innerHTML = h;
+
+  // porównanie
+  const nBest = r.diff >= r.sinkDiff;
+  $('cmp').innerHTML =
+    `<div class="${nBest?'best':''}"><div class="t">${t.normal}</div><div class="v">${kr(r.total)}</div><div class="note">${r.diff>=0?t.ret:t.pay}: ${kr(Math.abs(r.diff))}</div></div>`+
+    `<div class="${!nBest?'best':''}"><div class="t">${t.sink}</div><div class="v">${kr(r.sinkTax)}</div><div class="note">${r.sinkDiff>=0?t.ret:t.pay}: ${kr(Math.abs(r.sinkDiff))}</div></div>`;
+
+  // pola deklaracji
+  let d = '';
+  if (!sink){
+    d += row(`<span class="ruta">1.1</span> ${t.d11}`, kr(v.lon));
+    if (v.kost) d += row(`<span class="ruta">1.2</span> ${t.d12}`, kr(v.kost));
+    if (v.resor) d += row(`<span class="ruta">2.1</span> ${t.d21}`, kr(v.resor));
+    if (r.d22) d += row(`<span class="ruta">2.2</span> ${t.d22}`, kr(r.d22));
+    if (r.d23) d += row(`<span class="ruta">2.3</span> ${t.d23}`, kr(r.d23));
+    if (v.ovr) d += row(`<span class="ruta">2.4</span> ${t.d24}`, kr(v.ovr));
+  } else d = `<div style="grid-column:1/-1" class="note">${t.sinkNote}</div>`;
+  $('dekl').innerHTML = d;
+  $('deadline').textContent = year===2024 ? t.dl2024 : t.dl2025;
+
+  // tabela parametrów (oba lata)
+  const pa = P[2024], pb = P[2025], L = t.par;
+  const jsaMax = q => jobbskatteavdrag(9*q.pbb, up100(0.293*q.pbb), q.avgKI/100, q);
+  const rowsP = [
+    [L[0], kr(pa.pbb), kr(pb.pbb)],
+    [L[1], kr(pa.skikt), kr(pb.skikt)],
+    [L[2], `${fmt(up100(0.293*pa.pbb))}–${fmt(up100(0.77*pa.pbb))}`, `${fmt(up100(0.293*pb.pbb))}–${fmt(up100(0.77*pb.pbb))}`],
+    [L[3], kr(pa.psMax), kr(pb.psMax)],
+    [L[4], `${pa.trFull} / ${pa.trHalf}`, `${pb.trFull} / ${pb.trHalf}`],
+    [L[5], kr(pa.trNight), kr(pb.trNight)],
+    [L[6], kr(pa.tr3m), kr(pb.tr3m)],
+    [L[7], kr(pa.tillfMeal), kr(pb.tillfMeal)],
+    [L[8], kr(pa.dubbelMeal), kr(pb.dubbelMeal)],
+    [L[9], `${fmt(pa.resGr)} / ${fmt(pa.ovrGr)}`, `${fmt(pb.resGr)} / ${fmt(pb.ovrGr)}`],
+    [L[10], '25%', '25%'],
+    [L[11], '≈ '+kr(jsaMax(pa)), '≈ '+kr(jsaMax(pb))]
+  ];
+  $('parTbl').innerHTML = `<tr><th></th><th class="n">2024</th><th class="n">2025</th></tr>` +
+    rowsP.map(x=>`<tr><td>${x[0]}</td><td class="n" ${year===2024?'style="font-weight:700"':''}>${x[1]}</td><td class="n" ${year===2025?'style="font-weight:700"':''}>${x[2]}</td></tr>`).join('');
+
+  const m = t.meal;
+  $('mealTbl').innerHTML = `<tr><th>${m[0]}</th><th class="n">${m[1]}</th><th class="n">${m[2]}</th><th class="n">${m[3]}</th></tr>`+
+    [[m[4],261,183,131],[m[5],203,142,102],[m[6],102,71,51],[m[7],58,41,29]]
+    .map(x=>`<tr><td>${x[0]}</td><td class="n">${x[1]}</td><td class="n">${x[2]}</td><td class="n">${x[3]}</td></tr>`).join('');
+}
+
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  const dict = l==='sv' ? SV : PL;
+  document.querySelectorAll('[data-i]').forEach(el=>{ if (dict[el.dataset.i]) el.textContent = dict[el.dataset.i]; });
+  document.querySelectorAll('#langSeg button').forEach(b=>b.classList.toggle('on', b.dataset.l===l));
+  render();
+}
+function setYear(y){
+  const prevAvg = P[year].avgKI;
+  year = y;
+  if (parseFloat($('ki').value) === prevAvg) $('ki').value = P[y].avgKI;
+  document.querySelectorAll('#yearSeg button').forEach(b=>b.classList.toggle('on', +b.dataset.y===y));
+  render();
+}
+
+document.querySelectorAll('#yearSeg button').forEach(b=>b.onclick=()=>setYear(+b.dataset.y));
+document.querySelectorAll('#langSeg button').forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+document.addEventListener('input', render);
+document.addEventListener('change', render);
+render();
+</script>
+</body>
+</html>
